@@ -18,9 +18,7 @@
    - definovat `Deployment` pro aplikaci,
    - definovat `Service` (typ `LoadBalancer`) pro aplikaci,
    - definovat `HorizontalPodAutoscaler` pro aplikaci,
-   - opt: definovat `Deployment` a `Service` pro `Kubernetes dashboard`,
-   - opt: definovat `Deployment` a `Service` pro `h2load`.
-8. opt: integrovat monitorování metrik přes `Prometheus` a porovnat s `dashboardem Kubernetes` vytížení CPU.
+   - opt: definovat `Deployment` a `Service` pro `Kubernetes dashboard`.
 
 ### Realizovaný postup
 1. vytvořena aplikace:
@@ -42,16 +40,21 @@
     - `Service` (typ `LoadBalancer`) pro aplikaci,
     - `HorizontalPodAutoscaler` pro aplikaci.
 
-### Spuštění aplikace v k8s clusteru Docker Desktop
-1. spustit metrics server: `kubectl apply -f metrics-server.yml`,
-2. otestovat, zda běží metrics server: `kubectl top node` - musí vrátit nechybový výpis,
-3. spustit aplikaci: `kubectl apply -f metrics-server.yml`.
+### Spuštění aplikace v clusteru Docker Desktop
+1. spustit metrics server: `kubectl apply -f k8s/metrics-server.yml`,
+2. otestovat, zda běží metrics server: 
+   - `kubectl top node` - musí vrátit nechybový výpis,
+   - `kubectl get all -n kube-system`,
+3. spustit aplikaci: `kubectl apply -f k8s/project-app.yml`,
+4. aplikace je vystavena na URL: `{basePath}:8082/calculate`, např. `http://localhost:8082/calculate`
+5. opt - spustit dashboard: `kubectl apply -f k8s/dashboard.yml`,
+6. opt - otestovat, zda běží dashboard:
+   - `kubectl get all -n kubernetes-dashboard`,
+7. opt - vystavit dashboard na `localhost` (port `8001`):
+   - `kubectl proxy`,
+   - `GET`: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/.
 
-### Useful commands
+### Poznámky
 - `kubectl describe hpa` - popis Horizontal Pod Autoscaling
 - `kubectl get pods` - list všech podů
-
-# TODO
-- fixnout to, že pody jsou pending - mají málo zdrojů asi? zkusit zvýšit počet CPU v Docker Desktop
-- doplnit dashboard k8s
-- doplnit prometheus
+- nastavení `HPA`: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#example-change-downscale-stabilization-window

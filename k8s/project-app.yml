@@ -46,6 +46,9 @@ spec:
     name: k8s-project-app-deployment
   minReplicas: 1
   maxReplicas: 10
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 20
   metrics:
     - type: Resource
       resource:
