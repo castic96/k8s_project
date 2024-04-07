@@ -35,3 +35,23 @@
         - příklad: `docker run --rm -it ghcr.io/william-yeh/wrk -t20 -c4000 -d2m http://host.docker.internal:8082/calculate`
         - dát si pozor na nastavení Dockeru - pokud jsou malé zdroje pro Docker, pošle se málo requestů a vytížení bude malé
       - pozn.: `h2load` jsem nebyl schopen zprovoznit, nejspíš vyžadován SSL/TLS certifikát pro `localhost`
+3. přidán `Dockerfile` a `Image` pushnutý do Docker Hub,
+4. vyzkoušen běh aplikace v `Kubernetes` přes `CLI`,
+5. vytvořen `config yaml` pro deploy přes `Kubernetes`:
+    - `Deployment` pro aplikaci,
+    - `Service` (typ `LoadBalancer`) pro aplikaci,
+    - `HorizontalPodAutoscaler` pro aplikaci.
+
+### Spuštění aplikace v k8s clusteru Docker Desktop
+1. spustit metrics server: `kubectl apply -f metrics-server.yml`,
+2. otestovat, zda běží metrics server: `kubectl top node` - musí vrátit nechybový výpis,
+3. spustit aplikaci: `kubectl apply -f metrics-server.yml`.
+
+### Useful commands
+- `kubectl describe hpa` - popis Horizontal Pod Autoscaling
+- `kubectl get pods` - list všech podů
+
+# TODO
+- fixnout to, že pody jsou pending - mají málo zdrojů asi? zkusit zvýšit počet CPU v Docker Desktop
+- doplnit dashboard k8s
+- doplnit prometheus

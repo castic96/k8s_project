@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-project-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-project-app
+  template:
+    metadata:
+      labels:
+        app: k8s-project-app
+    spec:
+      containers:
+        - name: k8s-project-app
+          image: zdenekcastoral/k8s-project-app:1.0.0
+          ports:
+            - containerPort: 8082
+          resources:
+            requests:
+              cpu: "20m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-project-app-service
+spec:
+  selector:
+    app: k8s-project-app
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-project-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: k8s-project-app-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
