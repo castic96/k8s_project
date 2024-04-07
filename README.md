@@ -33,7 +33,7 @@
         - příklad: `docker run --rm -it ghcr.io/william-yeh/wrk -t20 -c4000 -d2m http://host.docker.internal:8082/calculate`
         - dát si pozor na nastavení Dockeru - pokud jsou malé zdroje pro Docker, pošle se málo requestů a vytížení bude malé
       - pozn.: `h2load` jsem nebyl schopen zprovoznit, nejspíš vyžadován SSL/TLS certifikát pro `localhost`
-3. přidán `Dockerfile` a `Image` pushnutý do Docker Hub,
+3. přidán `Dockerfile` a `Image` pushnutý do Docker Hub (https://hub.docker.com/repository/docker/zdenekcastoral/k8s-project-app),
 4. vyzkoušen běh aplikace v `Kubernetes` přes `CLI`,
 5. vytvořen `config yaml` pro deploy přes `Kubernetes`:
     - `Deployment` pro aplikaci,
