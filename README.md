@@ -21,3 +21,17 @@
    - opt: definovat `Deployment` a `Service` pro `Kubernetes dashboard`,
    - opt: definovat `Deployment` a `Service` pro `h2load`.
 8. opt: integrovat monitorování metrik přes `Prometheus` a porovnat s `dashboardem Kubernetes` vytížení CPU.
+
+### Realizovaný postup
+1. vytvořena aplikace:
+      - endpoint `{basePath}/calculate`, např. `localhost:8082/calculate` (port `8082` - by default),
+      - přidán výpočet faktoriálu pro číslo `20`,
+      - vystaveny všechny endpointy `Actuatoru` - vytížení procesoru pro proces `JVM`: `{basePath}/actuator/metrics/process.cpu.usage` např. `http://localhost:8082/actuator/metrics/process.cpu.usage`
+      - 
+2. vytížení simulováno přes `wrk` verze `4.2.0` (https://github.com/wg/wrk):
+      - příklad: `./wrk -t20 -c4000 -d2m http://localhost:8082/calculate`
+        - 20 threads, 4000 connections, 2 minutes duration
+      - lze také použít Docker Image `ghcr.io/william-yeh/wrk` (https://github.com/William-Yeh/docker-wrk):
+        - příklad: `docker run --rm -it ghcr.io/william-yeh/wrk -t20 -c4000 -d2m http://host.docker.internal:8082/calculate`
+        - dát si pozor na nastavení Dockeru - pokud jsou malé zdroje pro Docker, pošle se málo requestů a vytížení bude malé
+      - pozn.: `h2load` jsem nebyl schopen zprovoznit, nejspíš vyžadován SSL/TLS certifikát pro `localhost`

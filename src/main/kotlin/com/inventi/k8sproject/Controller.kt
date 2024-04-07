@@ -4,11 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class Controller {
+class Controller(
+    private val service: IService
+) {
 
-    @GetMapping("/hello")
-    fun hello(): String {
-        return "Hello, World!"
+    @GetMapping("/calculate")
+    fun calculate(): String {
+        val factorial = service.calculateFactorial()
+        return "Calculated factorial: $factorial "
     }
 
 }
