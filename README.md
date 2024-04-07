@@ -26,7 +26,7 @@
 1. vytvořena aplikace:
       - endpoint `{basePath}/calculate`, např. `localhost:8082/calculate` (port `8082` - by default),
       - přidán výpočet faktoriálu pro číslo `20`,
-      - vystaveny všechny endpointy `Actuatoru` - vytížení procesoru pro proces `JVM`: `{basePath}/actuator/metrics/process.cpu.usage` např. `http://localhost:8082/actuator/metrics/process.cpu.usage`
+      - vystaveny všechny endpointy `Actuatoru` - vytížení CPU pro proces `JVM`: `{basePath}/actuator/metrics/process.cpu.usage` např. `http://localhost:8082/actuator/metrics/process.cpu.usage`
       - 
 2. vytížení simulováno přes `wrk` verze `4.2.0` (https://github.com/wg/wrk):
       - příklad: `./wrk -t20 -c4000 -d2m http://localhost:8082/calculate`
